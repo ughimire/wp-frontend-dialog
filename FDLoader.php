@@ -9,6 +9,9 @@ class FDLoader
     // Plugin initialize from here
     public static function fdLoad()
     {
+
+        load_plugin_textdomain(WP_FD_TEXT_DOMAIN, false, WP_FD_PLUGIN_LANGUAGE_DIR);
+
         if (self::$instance == null) {
 
             self::$instance = new FDLoader();
@@ -17,6 +20,8 @@ class FDLoader
         self::$instance->loadHelper();
 
         self::$instance->registerAndLoadPackages();
+
+
     }
 
 // load helper (where  common functions are located for this plugin)

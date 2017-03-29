@@ -77,7 +77,7 @@ class  WP_FD_AdminSettings
 
 
         $data = array(
-            "pluginHeading" => "Frontend Post Submission Plugin",
+            "pluginHeading" => __("Frontend Dialog Popup", WP_FD_TEXT_DOMAIN),
             "options" => $this->options,
             "formField" => $formFields,
             "prefix" => FPForm::$visiblePrefix
