@@ -9,10 +9,10 @@ class  WP_FD_ShortCode
 
     public function load()
     {
-        /*   add_action('wp_enqueue_scripts', array($this, 'addScriptsAndStyles'));
+        add_action('wp_enqueue_scripts', array($this, 'addScriptsAndStyles'));
 
 
-           add_action('init', array($this, 'registerShortCode'));*/
+        add_action('init', array($this, 'registerShortCode'));
 
 
     }
@@ -39,13 +39,15 @@ class  WP_FD_ShortCode
     {
 
 
-        add_shortcode('frontend-post-submission', array($this, 'frontendPostSubmissionShortCode'));
+        add_shortcode('frontend-dialog', array($this, 'frontendPostSubmissionShortCode'));
 
     }
 
 
     public function frontendPostSubmissionShortCode($atts)
     {
+
+        echo __("This is nepali language", WP_FD_TEXT_DOMAIN);
         $this->options = get_option('fp_post_option_name');
 
         $sortingOrder = $this->options['fp_sortable_list_json'];

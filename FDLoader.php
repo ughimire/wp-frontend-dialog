@@ -10,7 +10,8 @@ class FDLoader
     public static function fdLoad()
     {
 
-        load_plugin_textdomain(WP_FD_TEXT_DOMAIN, false, WP_FD_PLUGIN_LANGUAGE_DIR);
+        load_plugin_textdomain(WP_FD_TEXT_DOMAIN, false, (plugin_basename(__FILE__)) . '/lang/');
+
 
         if (self::$instance == null) {
 
