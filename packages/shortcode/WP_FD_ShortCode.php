@@ -46,8 +46,20 @@ class  WP_FD_ShortCode
 
     public function frontendPostSubmissionShortCode($atts)
     {
+        //$path = dirname(plugin_basename( __FILE__ )) . '/../../lang/';
+        //echo $path;
 
-        echo __("This is nepali language", WP_FD_TEXT_DOMAIN);
+
+        load_plugin_textdomain(WP_FD_TEXT_DOMAIN, false, WP_PLUGIN_DIR . '/' . WP_FD_TEXT_DOMAIN . '/lang/');
+
+
+        if (is_textdomain_loaded(WP_FD_TEXT_DOMAIN)) {
+            echo "Loaded";
+        } else {
+            echo "Not loaded";
+            //return load_plugin_textdomain( $domain, false, $domain . '/languages' );
+        }
+        echo __("UmeshGhimire", WP_FD_TEXT_DOMAIN);
         $this->options = get_option('fp_post_option_name');
 
         $sortingOrder = $this->options['fp_sortable_list_json'];
@@ -55,7 +67,7 @@ class  WP_FD_ShortCode
         $formFields = array();
 //        pp($this->options);
 
-        $adminFormField = FPForm::$formFields;
+       /* $adminFormField = FPForm::$formFields;
         try {
 
             $sortingOrderArray = json_decode($sortingOrder);
@@ -96,7 +108,7 @@ class  WP_FD_ShortCode
         );
 
 
-        load_plugin_view("ui-form", $data);
+        load_plugin_view("ui-form", $data);*/
 
 
     }

@@ -1,5 +1,4 @@
 <?php
-
 /*
 Plugin Name: WP Frontend Dialog
 Plugin URI: http://umeshghimire.com.np
@@ -7,7 +6,7 @@ Description: frontend dialog plugin for wordpress
 Author: Umesh Ghimire
 Author URI: http://umeshghimire.com.np
 Text Domain: wp-frontend-dialog
-Domain Path: /languages/
+Domain Path: /lang/
 Version: 1.0
 */
 
@@ -49,12 +48,10 @@ define('WP_FD_PLUGIN_NAME', trim(dirname(WP_FD_BASE), '/'));
 // plugin directory
 define('WP_FD_PLUGIN_DIR', untrailingslashit(dirname(WP_FD_PLUGIN)));
 
-
 // packages path
 define('WP_FD_PLUGIN_PACKAGES_DIR', WP_PLUGIN_DIR . DIRECTORY_SEPARATOR . WP_FD_PLUGIN_NAME . DIRECTORY_SEPARATOR . 'packages' . DIRECTORY_SEPARATOR);// packages path
 // Language Dir
-define('WP_FD_PLUGIN_LANGUAGE_DIR', WP_PLUGIN_DIR . DIRECTORY_SEPARATOR . WP_FD_PLUGIN_NAME . DIRECTORY_SEPARATOR . 'lang' . DIRECTORY_SEPARATOR);
-
+define('WP_FD_PLUGIN_LANGUAGE_DIR', str_replace("/", DIRECTORY_SEPARATOR, str_replace("\\", DIRECTORY_SEPARATOR, WP_PLUGIN_DIR . DIRECTORY_SEPARATOR . WP_FD_PLUGIN_NAME . DIRECTORY_SEPARATOR . 'lang' . DIRECTORY_SEPARATOR)));
 
 // packages path
 define('WP_FD_PLUGIN_HELPER_DIR', WP_PLUGIN_DIR . DIRECTORY_SEPARATOR . WP_FD_PLUGIN_NAME . DIRECTORY_SEPARATOR . 'helper' . DIRECTORY_SEPARATOR);
@@ -83,6 +80,10 @@ if (!class_exists('FDLoader')) {
         require_once WP_FD_PLUGIN_DIR . DIRECTORY_SEPARATOR . 'FDLoader.php';
     }
 }
-
+add_action( 'init', 'myplugin_load_textdomain' );
+function myplugin_load_textdomain() {
+    //die('die);');
+    load_plugin_textdomain(WP_FD_TEXT_DOMAIN, false, WP_PLUGIN_DIR . '/' . WP_FD_TEXT_DOMAIN . '/lang/');
+}
 
 
