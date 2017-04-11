@@ -9,13 +9,15 @@ class  WP_FD_AdminSettings
     public function load()
     {
 
-
         add_action('admin_init', array($this, 'pluginInitAdmin'));
 
         add_action('admin_menu', array($this, 'renderAdminPage'));
 
 
     }
+
+
+
 
     /**
      * Option page for plugin
@@ -45,43 +47,13 @@ class  WP_FD_AdminSettings
      */
     public function createAdminPage()
     {
-
-
-        $this->options = get_option(WP_FD_TEXT_DOMAIN . '_options');
-
-
-        $sortingOrder = $this->options['fp_sortable_list_json'];
-
-        $formFields = array();
-
-        try {
-
-            $sortingOrderArray = json_decode($sortingOrder);
-
-            if (count($sortingOrderArray) < 1) {
-
-                $sortingOrderArray = array_keys(FPForm::$formFields);
-            }
-
-            foreach ($sortingOrderArray as $field) {
-
-                $formFields[$field] = FPForm::$formFields[$field];
-            }
-
-
-        } catch (Exception $e) {
-
-            $formFields = FPForm::$formFields;
-
-        }
-
+//echo WP_FD_TEXT_DOMAIN . '_options';
+        $this->options = get_option(WP_FD_TEXT_DOMAIN . '_option_name');
 
         $data = array(
             "pluginHeading" => __("Frontend Dialog Popup", WP_FD_TEXT_DOMAIN),
             "options" => $this->options,
-            "formField" => $formFields,
-            "prefix" => FPForm::$visiblePrefix
-
+            "prefix" => FDForm::$visiblePrefix
 
         );
 
@@ -94,8 +66,8 @@ class  WP_FD_AdminSettings
     public function pluginInitAdmin()
     {
         register_setting(
-            'fp_post_option_group', // Option group
-            'fp_post_option_name', // Option name
+            WP_FD_TEXT_DOMAIN . '_option_group', // Option group
+            WP_FD_TEXT_DOMAIN . '_option_name', // Option name
             array($this, 'sanitize') // Sanitize
         );
 
@@ -109,7 +81,6 @@ class  WP_FD_AdminSettings
     public function sanitize($input)
     {
 
-        $formFields = FPForm::$formFields;
 
         /* if (null == $input['post_title_label']) {
              add_settings_error(
@@ -123,41 +94,12 @@ class  WP_FD_AdminSettings
          }*/
         $new_input = array();
 
-        if (isset($input[$formFields['post_title']['admin_key']]))
+        if (isset($input['_dialog_title']))
+            $new_input['_dialog_title'] = ($input['_dialog_title']);
 
-            $new_input[$formFields['post_title']['admin_key']] = ($input[$formFields['post_title']['admin_key']]);
+        if (isset($input['_dialog_content']))
+            $new_input['_dialog_content'] = ($input['_dialog_content']);
 
-        if (isset($input[$formFields['author_name']['admin_key']]))
-            $new_input[$formFields['author_name']['admin_key']] = ($input[$formFields['author_name']['admin_key']]);
-
-        if (isset($input[$formFields['post_content']['admin_key']]))
-
-            $new_input[$formFields['post_content']['admin_key']] = ($input[$formFields['post_content']['admin_key']]);
-
-        if (isset($input[$formFields['feature_image']['admin_key']]))
-
-            $new_input[$formFields['feature_image']['admin_key']] = ($input[$formFields['feature_image']['admin_key']]);
-
-        if (isset($input["fp_sortable_list_json"]))
-
-            $new_input["fp_sortable_list_json"] = ($input["fp_sortable_list_json"]);
-
-
-        foreach ($formFields as $key => $form) {
-
-
-            if (isset($input[FPForm::$visiblePrefix . $form["admin_key"]])) {
-
-                $new_input[FPForm::$visiblePrefix . $form["admin_key"]] = 1;
-
-            } else {
-
-
-                $new_input[FPForm::$visiblePrefix . $form["admin_key"]] = 0;
-
-            }
-
-        }
 
         return $new_input;
     }

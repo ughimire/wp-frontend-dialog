@@ -9,12 +9,24 @@ class  WP_FD_ShortCode
 
     public function load()
     {
-        add_action('wp_enqueue_scripts', array($this, 'addScriptsAndStyles'));
 
 
         add_action('init', array($this, 'registerShortCode'));
 
 
+        add_action('wp_footer', array($this, 'loadModel'));
+
+
+        add_action('wp_enqueue_scripts', array($this, 'addScriptsAndStyles'));
+    }
+
+    function loadModel()
+    {
+
+        if (is_front_page()) {
+
+            do_shortcode("[wp-frontend-dialog]");
+        }
     }
 
     function addScriptsAndStyles()
@@ -22,93 +34,46 @@ class  WP_FD_ShortCode
 
 
         // Registering Scripts
-        wp_register_script('fp-google-hosted-jquery', 'https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js', false);
-        wp_register_script('fp-query-validation-plugin', 'https://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.min.js', array("fp-google-hosted-jquery"));
+        wp_register_script('fd-google-hosted-jquery', 'https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js', false);
 
-        wp_register_script('fp-custom-script', FP_BUILDER_PLUGIN_URL . 'js/custom.js', array(), '1');
-        wp_register_style('fp-css', FP_BUILDER_PLUGIN_URL . 'css/style.css', array(), '1');
+        wp_register_script('fd-query-validation-plugin', 'https://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.min.js', array("fd-google-hosted-jquery"));
+
+        wp_register_script('fd-custom-script', WP_FD_PLUGIN_URL . 'js/' . WP_FD_TEXT_DOMAIN . '.js', array(), '1');
+
+        wp_register_style('fd-custom-css', WP_FD_PLUGIN_URL . 'css/' . WP_FD_TEXT_DOMAIN . '.css', array(), '1');
 
         // Enqueueing Scripts to the head section
-        wp_enqueue_script('fp-google-hosted-jquery');
-        wp_enqueue_script('fp-jquery-validation-plugin');
-        wp_enqueue_style('fp-css');
+        wp_enqueue_script('fd-google-hosted-jquery');
+
+        wp_enqueue_script('fd-query-validation-plugin');
+
+        wp_enqueue_script('fd-custom-script');
+
+        wp_enqueue_style('fd-custom-css');
     }
 
 
     public function registerShortCode()
     {
 
-
-        add_shortcode('frontend-dialog', array($this, 'frontendPostSubmissionShortCode'));
+        add_shortcode('wp-frontend-dialog', array($this, 'frontendPostSubmissionShortCode'));
 
     }
 
-
     public function frontendPostSubmissionShortCode($atts)
     {
-        //$path = dirname(plugin_basename( __FILE__ )) . '/../../lang/';
-        //echo $path;
 
-
-        load_plugin_textdomain(WP_FD_TEXT_DOMAIN, false, WP_PLUGIN_DIR . '/' . WP_FD_TEXT_DOMAIN . '/lang/');
-
-
-        if (is_textdomain_loaded(WP_FD_TEXT_DOMAIN)) {
-            echo "Loaded";
-        } else {
-            echo "Not loaded";
-            //return load_plugin_textdomain( $domain, false, $domain . '/languages' );
-        }
-        echo __("UmeshGhimire", WP_FD_TEXT_DOMAIN);
-        $this->options = get_option('fp_post_option_name');
-
-        $sortingOrder = $this->options['fp_sortable_list_json'];
-
-        $formFields = array();
-//        pp($this->options);
-
-       /* $adminFormField = FPForm::$formFields;
-        try {
-
-            $sortingOrderArray = json_decode($sortingOrder);
-
-
-            if (count($sortingOrderArray) < 1) {
-
-                $sortingOrderArray = array_keys($adminFormField);
-            }
-
-            foreach ($sortingOrderArray as $field) {
-
-                if (isset($this->options[FPForm::$visiblePrefix . $adminFormField[$field]["admin_key"]])) {
-
-                    if ($this->options[FPForm::$visiblePrefix . $adminFormField[$field]["admin_key"]] == 1) {
-                        $formFields[$field] = array(
-                            "front_key" => $field,
-                            "label" => isset($this->options[$adminFormField[$field]["admin_key"]]) ? $this->options[$adminFormField[$field]["admin_key"]] : ""
-
-                        );
-                    }
-                }
-            }
-
-        } catch (Exception $e) {
-
-
-        }
-
+        $this->options = get_option(WP_FD_TEXT_DOMAIN . '_option_name');
 
         $data = array(
-            "label" => "This is heading of the plugin",
+            "pluginHeading" => __("Frontend Dialog Popup", WP_FD_TEXT_DOMAIN),
             "options" => $this->options,
-            "formField" => $formFields,
-            "prifix" => FPForm::$visiblePrefix
-
 
         );
 
+        _fd_load_plugin_view("ui-dialog", $data);
 
-        load_plugin_view("ui-form", $data);*/
+        //echo __("This website is boss", WP_FD_TEXT_DOMAIN);
 
 
     }

@@ -79,11 +79,14 @@ if (!class_exists('FDLoader')) {
 
         require_once WP_FD_PLUGIN_DIR . DIRECTORY_SEPARATOR . 'FDLoader.php';
     }
-}
-add_action( 'init', 'myplugin_load_textdomain' );
-function myplugin_load_textdomain() {
-    //die('die);');
-    load_plugin_textdomain(WP_FD_TEXT_DOMAIN, false, WP_PLUGIN_DIR . '/' . WP_FD_TEXT_DOMAIN . '/lang/');
-}
 
+    /*add_filter('locale', 'wp_frontend_dialog_locale');
+    function wp_frontend_dialog_locale($locale) {
+        if ( !is_admin() ) {
+            return 'ne_NP';
+        }
 
+        return $locale;
+    }*/
+}
+?>

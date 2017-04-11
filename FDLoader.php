@@ -9,10 +9,11 @@ class FDLoader
     // Plugin initialize from here
     public static function fdLoad()
     {
-        $path = dirname(plugin_basename( __FILE__ )) . '/lang/';
-        $loaded = load_plugin_textdomain(WP_FD_TEXT_DOMAIN, false, $path);
 
-        //load_plugin_textdomain(WP_FD_TEXT_DOMAIN, false, WP_FD_PLUGIN_LANGUAGE_DIR);
+
+        //load_plugin_textdomain('WP_FD_TEXT_DOMAIN', false, dirname(plugin_basename(__FILE__)) . '/lang/');
+
+        load_plugin_textdomain(WP_FD_TEXT_DOMAIN, false, dirname(plugin_basename(__FILE__)) . '/lang/');
 
 
         if (self::$instance == null) {
@@ -24,7 +25,17 @@ class FDLoader
 
         self::$instance->registerAndLoadPackages();
 
+        self::$instance->removeP();
 
+
+    }
+
+    function removeP()
+    {
+
+        if (is_front_page()) {
+            echo "<h1>Hello World</h1>";
+        }
     }
 
 // load helper (where  common functions are located for this plugin)
@@ -90,9 +101,10 @@ class FDLoader
 
                 "admin-setting" => "WP_FD_AdminSettings",
 
-                /*  "form" => "FPForm",
+                "form" => "FDForm",
 
-                  "actions" => "FPActions"*/
+
+                /*"actions" => "FPActions"*/
 
             )
         );
@@ -104,9 +116,9 @@ class FDLoader
 
             $this->loadPackage("admin-setting");
         }
-        /* $this->loadPackage("form");
+        $this->loadPackage("form");
 
-         $this->loadPackage("actions");*/
+        /*$this->loadPackage("actions");*/
     }
 
     private function loadPackage($packageName)
